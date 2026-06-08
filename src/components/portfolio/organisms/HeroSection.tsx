@@ -31,7 +31,7 @@ export default function HeroSection({ portrait }: HeroSectionProps) {
         </div>
         <figure
           data-testid="hero-portrait-frame"
-          className="order-first mx-auto size-44 overflow-hidden rounded-full border border-line shadow-crisp sm:size-60 md:size-72 lg:order-none lg:aspect-[2/3] lg:h-auto lg:w-full lg:max-w-[28rem] lg:rounded-md"
+          className="order-first mx-auto size-44 overflow-hidden rounded-[9999px] border border-line shadow-crisp sm:size-60 md:size-72 lg:order-none lg:aspect-[2/3] lg:h-auto lg:w-full lg:max-w-[28rem] lg:rounded-md"
         >
           <img
             src={portrait.src}
@@ -40,7 +40,7 @@ export default function HeroSection({ portrait }: HeroSectionProps) {
             alt="Portrait of Justin Fung"
             width={portrait.width}
             height={portrait.height}
-            className="h-full w-full scale-150 object-cover object-[center_68%] lg:scale-100 lg:object-top"
+            className="h-full w-full object-cover object-[center_68%] [transform:scale(1.5)] lg:object-top lg:[transform:scale(1)]"
             loading="eager"
             decoding="async"
             fetchPriority="high"

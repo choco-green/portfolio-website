@@ -9,7 +9,7 @@ type ActionLinkProps = AnchorHTMLAttributes<HTMLAnchorElement> & {
 };
 
 const variants: Record<ActionLinkVariant, string> = {
-  primary: "bg-accent text-[rgb(var(--color-accent-contrast))] shadow-sm hover:bg-accent-strong",
+  primary: "bg-accent text-[rgb(var(--rgb-accent-contrast))] shadow-xs hover:bg-accent-strong",
   neutral: "border border-line bg-raised text-ink hover:border-accent hover:text-accent-strong"
 };
 

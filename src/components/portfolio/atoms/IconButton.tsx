@@ -12,7 +12,7 @@ type IconButtonProps = Omit<ButtonHTMLAttributes<HTMLButtonElement>, "children">
 };
 
 const variants: Record<IconButtonVariant, string> = {
-  default: "border-line bg-raised text-ink shadow-sm hover:border-accent hover:text-accent-strong",
+  default: "border-line bg-raised text-ink shadow-xs hover:border-accent hover:text-accent-strong",
   inverse: "border-white/25 bg-white/10 text-white hover:border-contact-accent hover:text-contact-accent"
 };
 

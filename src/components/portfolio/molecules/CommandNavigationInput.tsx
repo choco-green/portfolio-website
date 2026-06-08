@@ -39,7 +39,7 @@ export default function CommandNavigationInput({
       <label htmlFor="command-navigation" className="sr-only">
         Command navigation input
       </label>
-      <div data-testid="command-control" className="site-nav-control flex min-h-11 w-full items-center rounded-md border px-3 shadow-sm">
+      <div data-testid="command-control" className="site-nav-control flex min-h-11 w-full items-center rounded-md border px-3 shadow-xs">
         <span aria-hidden="true" className="site-nav-accent mr-2 font-mono text-sm">
           &gt;
         </span>
@@ -52,7 +52,7 @@ export default function CommandNavigationInput({
             setSuggestionsOpen(true);
           }}
           placeholder="Type a command or search..."
-          className="site-nav-input min-w-0 flex-1 bg-transparent text-sm text-[rgb(var(--color-nav-ink))] focus:outline-none"
+          className="site-nav-input min-w-0 flex-1 bg-transparent text-sm text-[rgb(var(--color-nav-ink))] focus:outline-hidden"
           autoComplete="off"
         />
       </div>

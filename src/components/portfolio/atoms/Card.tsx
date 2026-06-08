@@ -8,7 +8,7 @@ type CardProps = ComponentPropsWithoutRef<"article"> & {
 };
 
 const tones: Record<CardTone, string> = {
-  panel: "bg-panel shadow-sm",
+  panel: "bg-panel shadow-xs",
   raised: "bg-raised"
 };
 

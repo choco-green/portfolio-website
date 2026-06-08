@@ -6,10 +6,13 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro check && astro build",
-    "preview": "astro preview",
-    "test:e2e": "playwright test"
+    "preview": "npm run build && wrangler dev",
+    "test:e2e": "playwright test",
+    "generate-types": "wrangler types",
+    "deploy": "npm run build && wrangler deploy"
   },
   "dependencies": {
+    "@astrojs/cloudflare": "^13.6.1",
     "@astrojs/react": "^5.0.7",
     "astro": "^6.4.4",
     "lucide-react": "^1.17.0",
@@ -24,5 +27,8 @@
     "tailwindcss": "^4.3.0",
     "typescript": "^6.0.3",
     "wrangler": "^4.98.0"
+  },
+  "overrides": {
+    "vite": "^7"
   }
 }

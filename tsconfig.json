@@ -3,6 +3,11 @@
   "compilerOptions": {
     "jsx": "react-jsx",
     "jsxImportSource": "react",
-    "types": ["astro/client"]
-  }
+    "types": [
+      "astro/client"
+    ]
+  },
+  "include": [
+    "./worker-configuration.d.ts"
+  ]
 }

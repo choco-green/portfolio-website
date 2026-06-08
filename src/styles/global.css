@@ -1,0 +1,261 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+  --color-canvas: 245 247 241;
+  --color-panel: 255 255 250;
+  --color-raised: 255 255 255;
+  --color-ink: 17 27 24;
+  --color-muted: 83 99 92;
+  --color-line: 197 207 198;
+  --color-accent: 21 132 88;
+  --color-accent-contrast: 255 255 255;
+  --color-accent-strong: 9 86 62;
+  --color-accent-soft: 218 239 226;
+  --color-signal: 186 122 22;
+  --color-proof: 55 83 159;
+  --color-contact: 17 27 24;
+  --color-contact-accent: 128 226 173;
+  --color-nav-surface: 245 247 241;
+  --color-nav-raised: 255 255 255;
+  --color-nav-hover: 218 239 226;
+  --color-nav-ink: 17 27 24;
+  --color-nav-muted: 57 70 63;
+  --color-nav-accent: 6 75 54;
+  --color-nav-line: 151 166 156;
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
+  --color-canvas: 9 17 16;
+  --color-panel: 15 28 26;
+  --color-raised: 22 38 35;
+  --color-ink: 237 244 240;
+  --color-muted: 163 181 172;
+  --color-line: 48 69 63;
+  --color-accent: 79 198 137;
+  --color-accent-contrast: 17 27 24;
+  --color-accent-strong: 128 226 173;
+  --color-accent-soft: 20 62 45;
+  --color-signal: 231 174 74;
+  --color-proof: 130 158 245;
+  --color-contact: 17 27 24;
+  --color-contact-accent: 128 226 173;
+  --color-nav-surface: 9 17 16;
+  --color-nav-raised: 22 38 35;
+  --color-nav-hover: 20 62 45;
+  --color-nav-ink: 237 244 240;
+  --color-nav-muted: 163 181 172;
+  --color-nav-accent: 128 226 173;
+  --color-nav-line: 48 69 63;
+}
+
+html {
+  scroll-behavior: smooth;
+  background: rgb(var(--color-canvas));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+body {
+  min-width: 320px;
+  overflow-x: clip;
+  background:
+    linear-gradient(180deg, rgb(var(--color-accent-soft) / 0.38), transparent 34rem),
+    rgb(var(--color-canvas));
+  color: rgb(var(--color-ink));
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  letter-spacing: 0;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: rgb(var(--color-accent) / 0.24);
+}
+
+:focus-visible {
+  outline: 3px solid rgb(var(--color-accent));
+  outline-offset: 3px;
+}
+
+.skip-link {
+  position: fixed;
+  left: 1rem;
+  top: 1rem;
+  z-index: 100;
+  transform: translateY(-150%);
+  border: 1px solid rgb(var(--color-line));
+  border-radius: 0.5rem;
+  background: rgb(var(--color-raised));
+  color: rgb(var(--color-ink));
+  padding: 0.75rem 1rem;
+  font-weight: 700;
+  transition: transform 160ms ease;
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+}
+
+.site-nav {
+  border-color: rgb(var(--color-nav-line));
+  background: rgb(var(--color-nav-surface));
+  color: rgb(var(--color-nav-ink));
+}
+
+.site-nav-muted {
+  color: rgb(var(--color-nav-muted));
+}
+
+.site-nav-accent {
+  color: rgb(var(--color-nav-accent));
+}
+
+.site-nav-control,
+.site-nav-menu,
+.site-nav-popover {
+  border-color: rgb(var(--color-nav-line));
+  background: rgb(var(--color-nav-raised));
+  color: rgb(var(--color-nav-ink));
+}
+
+.site-nav-input::placeholder {
+  color: rgb(var(--color-nav-muted));
+  opacity: 1;
+}
+
+.site-nav-icon-button,
+.site-nav-option {
+  border-color: rgb(var(--color-nav-line));
+  background: rgb(var(--color-nav-raised));
+  color: rgb(var(--color-nav-ink));
+}
+
+.site-nav-icon-button:hover,
+.site-nav-option:hover,
+.site-nav-option[aria-current="page"] {
+  border-color: rgb(var(--color-nav-accent));
+  background: rgb(var(--color-nav-hover));
+  color: rgb(var(--color-nav-accent));
+}
+
+.site-nav-option:hover .site-nav-muted,
+.site-nav-option[aria-current="page"] .site-nav-muted {
+  color: rgb(var(--color-nav-accent));
+}
+
+.surface-grid {
+  background-image:
+    linear-gradient(rgb(var(--color-line) / 0.5) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(var(--color-line) / 0.5) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+.timeline-section {
+  --timeline-transition-duration: 250ms;
+
+  border-color: color-mix(in srgb, var(--timeline-line) 78%, transparent);
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--timeline-background-soft) 54%, var(--timeline-background)) 0,
+      var(--timeline-background) 34rem
+    ),
+    var(--timeline-background);
+  color: var(--timeline-ink);
+  transition:
+    background var(--timeline-transition-duration) ease,
+    border-color var(--timeline-transition-duration) ease,
+    color var(--timeline-transition-duration) ease;
+}
+
+.timeline-progress-button {
+  border-color: color-mix(in srgb, var(--timeline-line) 72%, transparent);
+  background: var(--timeline-background);
+  color: var(--timeline-ink);
+  box-shadow: 0 1px 0 rgb(255 255 255 / 0.16);
+  transition-duration: var(--timeline-transition-duration);
+}
+
+.timeline-progress-button:hover {
+  border-color: var(--timeline-accent);
+  background: color-mix(in srgb, var(--timeline-background) 92%, var(--timeline-background-soft));
+  color: var(--timeline-ink);
+}
+
+.timeline-progress-button-active,
+.timeline-progress-button-active:hover {
+  border-color: var(--timeline-accent);
+  background: var(--timeline-accent);
+  color: var(--timeline-card-number);
+}
+
+.timeline-panel {
+  background:
+    linear-gradient(135deg, var(--entry-soft), transparent 38%),
+    rgb(var(--color-panel) / 0.92);
+  backdrop-filter: blur(10px);
+  color: rgb(var(--color-ink));
+  transition-duration: var(--timeline-transition-duration);
+}
+
+.timeline-panel-active {
+  border-color: color-mix(in srgb, var(--timeline-accent) 74%, var(--timeline-line));
+}
+
+.timeline-logo-frame {
+  border-color: color-mix(in srgb, var(--timeline-line) 74%, transparent);
+  background: rgb(17 27 24);
+  transition:
+    border-color var(--timeline-transition-duration) ease,
+    background-color var(--timeline-transition-duration) ease;
+}
+
+.evidence-card {
+  transition-duration: var(--timeline-transition-duration);
+}
+
+.evidence-card img {
+  transform-origin: center;
+}
+
+.motion-safe-scan img {
+  animation: evidence-scan 15s ease-in-out infinite alternate;
+}
+
+.motion-safe-scan:hover img,
+.motion-safe-scan:focus-within img {
+  animation-play-state: paused;
+}
+
+@keyframes evidence-scan {
+  from {
+    transform: scale(1.01) translateY(0);
+  }
+
+  to {
+    transform: scale(1.045) translateY(-1.25%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .motion-safe-scan img {
+    animation: none;
+    transform: none;
+  }
+}

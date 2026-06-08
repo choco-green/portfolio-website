@@ -1,0 +1,89 @@
+---
+import "../styles/global.css";
+import Navigation from "../components/portfolio/organisms/Navigation";
+import HeroSection from "../components/portfolio/organisms/HeroSection";
+import ExperienceTimeline from "../components/portfolio/organisms/ExperienceTimeline";
+import ProjectsSection from "../components/portfolio/organisms/ProjectsSection";
+import SkillsSection from "../components/portfolio/organisms/SkillsSection";
+import ContactSection from "../components/portfolio/organisms/ContactSection";
+import { preparePortfolioImages } from "../components/portfolio/prepareImages";
+
+const siteName = "Justin Fung Portfolio";
+const title = siteName;
+const description =
+  "Justin Fung is a full-stack engineer in Germany building polished web products, robust backend systems, and evidence-backed product experiences.";
+const portfolioImages = await preparePortfolioImages();
+const site = Astro.site ?? new URL("https://justinfung.com");
+const heroPortraitUrl = new URL(portfolioImages.heroPortrait.src, site).toString();
+
+const person = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: "Justin Fung",
+  url: "https://justinfung.com/",
+  jobTitle: "Full-stack engineer",
+  image: heroPortraitUrl,
+  sameAs: [
+    "https://github.com/choco-green",
+    "https://www.linkedin.com/in/justin-fung-nsb"
+  ],
+  knowsAbout: [
+    "TypeScript",
+    "React",
+    "Next.js",
+    "Node.js",
+    "NestJS",
+    "Rust",
+    "Postgres",
+    "Docker",
+    "Testing"
+  ],
+  address: {
+    "@type": "PostalAddress",
+    addressCountry: "DE"
+  }
+};
+---
+
+<!doctype html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="application-name" content={siteName} />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href="https://justinfung.com/" />
+    <meta property="og:type" content="profile" />
+    <meta property="og:title" content={title} />
+    <meta property="og:site_name" content={siteName} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content="https://justinfung.com/" />
+    <meta property="og:image" content={heroPortraitUrl} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <script is:inline>
+      (() => {
+        const key = "portfolio-theme";
+        const root = document.documentElement;
+        const stored = window.localStorage.getItem(key);
+        const system = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+        root.dataset.theme = stored === "light" || stored === "dark" ? stored : system;
+      })();
+    </script>
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(person)} />
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+    <Navigation client:idle />
+    <main id="main-content" tabindex="-1">
+      <HeroSection portrait={portfolioImages.heroPortrait} />
+      <ExperienceTimeline entries={portfolioImages.experienceEntries} client:visible={{ rootMargin: "120px" }} />
+      <ProjectsSection projects={portfolioImages.projects} />
+      <SkillsSection />
+      <ContactSection />
+    </main>
+  </body>
+</html>

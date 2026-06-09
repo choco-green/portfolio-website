@@ -16,7 +16,7 @@ export const experienceEntries: ExperienceEntry[] = [
   {
     id: "experience-clinify",
     title: "Clinify",
-    role: "Fullstack engineer",
+    role: "Full-stack engineer",
     period: "Mar 2024 - Mar 2025",
     logo: "/assets/logos/clinify.svg",
     logoAlt: "Clinify logo",
@@ -31,11 +31,12 @@ export const experienceEntries: ExperienceEntry[] = [
       muted: "#18181b"
     },
     summary:
-      "Full-stack role leading UI/UX, closed-beta feedback, and documentation for a gamified medical education platform.",
+      "Full-stack role building production UKMLA medical education features with Next.js, React, TypeScript, Supabase, and OpenAI API integrations.",
     outcomes: [
-      "Led the UI/UX team, overseeing the design of all user interfaces to ensure seamless user experiences across the product and apply the core concept of gamification in medical education",
-      "Led a closed beta with 100 users, gathering product feedback that informed feature prioritization and roadmap planning alongside the CEO.",
-      "Designed and implemented a comprehensive documentation system, reducing onboarding time and providing an accessible reference hub for ongoing systems."
+      "Implemented a production OSCE AI simulation bot with text-to-speech and speech-to-text workflows for patient-scenario practice.",
+      "Built gamified SBA and SAQ interfaces for practice and exam modes using Next.js, React, TypeScript, Chakra UI, Supabase, and OpenAI API integrations.",
+      "Ran a 100-user closed beta, synthesized user feedback into prioritized product requirements, and supplied roadmap recommendations to the CEO.",
+      "Maintained centralized product and technical documentation for a 5-person team, keeping implementation context, handoff assets, and product decisions aligned."
     ],
     evidence: [
       {
@@ -72,7 +73,7 @@ export const experienceEntries: ExperienceEntry[] = [
     id: "experience-ibm-cic-hackathon",
     title: "IBM CIC Hackathon",
     role: "Finalist",
-    period: "2024",
+    period: "Feb 2024",
     logo: "/assets/logos/ibm.svg",
     logoAlt: "IBM logo",
     accent: "rgba(55, 83, 159, 0.18)",
@@ -86,11 +87,11 @@ export const experienceEntries: ExperienceEntry[] = [
       muted: "#ffffff"
     },
     summary:
-      "Hackathon finalist project shaped, built, and presented as a practical proof of concept within a 48-hour team sprint.",
+      "Hackathon finalist project with a full frontend build and API-backed proof of concept for peer-to-peer skill sharing and event management.",
     outcomes: [
-      "Shaped a clear and compelling product narrative within the constraints of a 48-hour hackathon format.",
-      "Built and demonstrated a practical proof of concept under tight time and resource constraints in a team of 2.",
-      "Delivered a structured final presentation supported by a clear product demo."
+      "Built the full frontend for a peer-to-peer skill-sharing and event-management proof of concept in a 48-hour IBM CIC Innovation Hackathon.",
+      "Reached finalist status among 15 teams by shipping a demoable workflow for skill-sharing sessions, workshops, study groups, and event management.",
+      "Presented the user problem, product workflow, API-backed implementation path, and technical artefacts through a structured final demo."
     ],
     evidence: [
       {
@@ -123,14 +124,14 @@ export const experienceEntries: ExperienceEntry[] = [
       "BSc Computer Science work with First Class Honours, grounding typed programming, algorithms, databases, and practical software engineering.",
     outcomes: [
       "Built the foundation for typed programming, algorithms, databases, and software engineering practice.",
-      "Connected academic work with practical portfolio projects and product implementation.",
+      "Connected academic work with Rust systems programming, accessible web interfaces, product implementation, and data-backed experimentation."
     ],
     evidence: []
   },
   {
     id: "experience-dmginc",
-    title: "DmgInc",
-    role: "Frontend engineer - RPG crafting experience",
+    title: "Damage Inc",
+    role: "Frontend engineer - gaming community platform",
     period: "Jan 2023 - Nov 2023",
     logo: "/assets/logos/dmginc.svg",
     logoAlt: "DmgInc logo",
@@ -145,11 +146,11 @@ export const experienceEntries: ExperienceEntry[] = [
       muted: "#c8c8c8"
     },
     summary:
-      "Frontend role designing and building React and TypeScript RPG systems, responsive event pages, and admin tooling with measurable product gains.",
+      "Frontend role designing and building React and TypeScript interfaces for an 80k-user gaming community platform with event, REP economy, and admin workflows.",
     outcomes: [
-      "Architected, designed, and developed a complex crafting system for an RPG feature using Figma, TypeScript, and React, increasing retention by 5%.",
-      "Designed and developed a responsive events page using Figma and React, ensuring cross-browser compatibility and boosting mobile engagement by 15%.",
-      "Designed and developed a responsive Admin Control Panel (ACP) for admin management using Figma and React, improving administrative efficiency."
+      "Architected and built a React/TypeScript RPG-style crafting and REP economy interface for an 80k-user gaming community platform.",
+      "Designed and shipped a responsive React events page from Figma designs while maintaining cross-browser compatibility.",
+      "Rebuilt a responsive Admin Control Panel from a legacy PHP system for ~500 admins managing recurring community workflows."
     ],
     evidence: [
       {
@@ -182,7 +183,7 @@ export const projects: Project[] = [
     order: 1,
     title: "Rust Traffic Simulator",
     summary:
-      "A Rust-based microscopic traffic simulator for modelling motorway flow, lane changes, ramp metering, emissions, and repeatable traffic analytics.",
+      "A Rust microscopic motorway traffic simulator with tests, benchmarks, visual output, lane changes, ramp metering, emissions, deterministic modelling, and repeatable analytics.",
     screenshot: {
       label: "Traffic simulator GUI overview",
       src: "/assets/images/projects/microscopic-traffic-simulator-gui-overview.webp",
@@ -197,7 +198,7 @@ export const projects: Project[] = [
     order: 2,
     title: "UniSkill",
     summary:
-      "🏆 Finalist project from the IBM CIC Innovation Hackathon. UniSkill is a platform that connects university students through skill-sharing sessions, workshops, study groups, and event management, making peer-to-peer learning more accessible and collaborative.",
+      "Finalist project from 15 teams at the IBM CIC Innovation Hackathon: an API-backed peer-to-peer skill-sharing and event-management platform with a full frontend built in 48 hours.",
     screenshot: {
       label: "UniSkill calendar interface",
       src: "/assets/images/projects/uniskill-calendar-interface.webp",
@@ -212,7 +213,7 @@ export const projects: Project[] = [
     order: 4,
     title: "EPQ",
     summary:
-      "EPQ A* artefact: a TensorFlow/Keras image-classification notebook using transfer learning with InceptionResNetV2 to classify cats and dogs, including retained training outputs and project context.",
+      "A* EPQ artefact: a TensorFlow/Keras image-classification notebook using transfer learning with InceptionResNetV2 to classify cats and dogs, with retained training outputs and research context.",
     tags: ["Python", "Machine Learning", "Research"],
     url: "https://github.com/choco-green/EPQ"
   },
@@ -227,15 +228,15 @@ export const projects: Project[] = [
   {
     order: 6,
     title: "SquareCrop",
-    summary: "Browser-based React app for cropping local images and exporting resized square JPGs.",
-    tags: ["React", "Canvas", "Client UI"],
+    summary: "Browser-based React tool for cropping local images and exporting resized square JPGs entirely client-side.",
+    tags: ["React", "Image Tooling", "Client UI"],
     url: "https://github.com/choco-green/SquareCrop"
   },
   {
     order: 3,
     title: "Portfolio Website",
     summary:
-      "An Astro and React portfolio website with accessible command navigation, semantic content sections, SEO metadata, JSON-LD, and static checks for crawlable project evidence.",
+      "A deployed Astro/React portfolio with 100 Lighthouse scores, accessible command navigation, SEO metadata, TypeScript content models, and static checks for crawlable project evidence.",
     screenshot: {
       label: "Portfolio homepage",
       src: "/assets/images/projects/portfolio-platform-home.webp",
@@ -256,28 +257,34 @@ export const skillGroups: SkillGroup[] = [
       "Next.js",
       "Astro",
       "Vite",
+      "Chakra UI",
       "Tailwind CSS",
-      "Responsive UI",
+      "HTML",
+      "CSS",
       "Accessibility",
-      "Figma",
-      "Testing"
+      "Responsive UI",
+      "Cross-browser compatibility"
     ]
   },
   {
-    title: "Backend",
-    items: ["Node.js", "NestJS", "REST APIs", "API design", "Express", "Flask", "Docker", "Server-side rendering", "Spring Boot"]
+    title: "Backend and APIs",
+    items: ["Node.js", "NestJS", "Express", "Flask", "Spring Boot", "RESTful APIs", "OpenAI API", "Authentication", "Authorization", "Security"]
   },
   {
-    title: "Cloud",
-    items: ["GCP", "Azure", "AWS", "Static deployment", "CI workflows", "GitHub Actions", "DigitalOcean", "Release automation"]
+    title: "Testing and Quality",
+    items: ["Unit testing", "Integration testing", "Jest", "Vitest", "Playwright", "Code review", "CI/CD"]
   },
   {
-    title: "Databases",
-    items: ["Postgres", "Schema design", "Query planning", "Migrations", "Supabase", "Prisma", "Redis"]
+    title: "Data and Systems",
+    items: ["SQL", "Postgres", "Supabase", "Prisma", "Redis", "Database schema design", "Query optimisation", "Data structures", "Algorithms", "Object-oriented programming", "System design"]
+  },
+  {
+    title: "Cloud and Delivery",
+    items: ["Git", "GitHub", "Linux", "Docker", "GitHub Actions", "Deployment", "Observability", "Logging", "AWS", "Azure", "GCP", "DigitalOcean"]
   },
   {
     title: "Programming Languages",
-    items: ["TypeScript", "JavaScript", "Rust", "Java", "Python"]
+    items: ["TypeScript", "JavaScript", "Rust", "Java", "Python", "SQL"]
   }
 ];
 
@@ -288,9 +295,9 @@ export const languages: Language[] = [
 ];
 
 export const softSkills = [
-  "Turns ambiguous product ideas into scoped implementation plans.",
-  "Documents interface decisions so handoff work is easy to review.",
-  "Balances polished UI details with backend reliability and test coverage.",
+  "Scopes ambiguous product requirements into implementation plans that can be built, reviewed, and tested.",
+  "Documents product-flow and design-system decisions so implementation work has stable context.",
+  "Balances responsive UI detail with maintainable React/TypeScript structures and testable behavior.",
   "Communicates tradeoffs directly when scope, quality, or evidence is at risk."
 ];
 

@@ -342,6 +342,15 @@ test("hero resume action uses the localized resume download endpoint", async ({ 
   await expect(page.getByRole("link", { name: "View All Skills" })).toHaveCount(0);
 });
 
+test("local dev server serves the resume download endpoint", async ({ request }) => {
+  const response = await request.get("/resume/download");
+
+  expect(response.ok()).toBe(true);
+  expect(response.headers()["content-disposition"]).toBe('attachment; filename="justin-fung-resume.pdf"');
+  expect(response.headers()["content-type"]).toContain("application/pdf");
+  expect((await response.body()).length).toBeGreaterThan(0);
+});
+
 test("Cloudflare resume endpoint downloads the Germany resume for Germany visitors", async () => {
   const { fetchedUrls, response } = await invokeResumeDownload("DE");
 
@@ -379,16 +388,38 @@ test("timeline dots and Evidence Viewer controls work", async ({ page }) => {
   await expect(dialog).toBeHidden();
 });
 
-test("contact actions, resume, and reduced-motion content are available", async ({ page }) => {
+test("contact tabs, resume callout, and reduced-motion content are available", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.addInitScript(() => window.localStorage.setItem("portfolio-theme", "dark"));
   await page.goto("/#contact");
 
-  await expect(page.getByRole("link", { name: /Email: justin--fung@outlook.com/ })).toHaveAttribute("href", "mailto:justin--fung@outlook.com");
-  await expect(page.getByRole("link", { name: /GitHub: github.com\/choco-green/ })).toHaveAttribute("href", "https://github.com/choco-green");
-  await expect(page.getByRole("link", { name: /LinkedIn: linkedin.com\/in\/justin-fung-nsb/ })).toHaveAttribute("href", "https://www.linkedin.com/in/justin-fung-nsb");
-  await expect(page.getByRole("link", { name: /Resume: Download Justin Fung resume PDF/ })).toHaveAttribute("href", "/resume/download");
+  const contactTabs = page.getByTestId("contact-social-tabs");
+  await expect(contactTabs.getByRole("link")).toHaveCount(3);
+  await expect(contactTabs.getByRole("link", { name: /Email: justin--fung@outlook.com/ })).toHaveAttribute("href", "mailto:justin--fung@outlook.com");
+  await expect(contactTabs.getByRole("link", { name: /GitHub: github.com\/choco-green/ })).toHaveAttribute("href", "https://github.com/choco-green");
+  await expect(contactTabs.getByRole("link", { name: /LinkedIn: linkedin.com\/in\/justin-fung-nsb/ })).toHaveAttribute("href", "https://www.linkedin.com/in/justin-fung-nsb");
+  await expect(page.getByTestId("contact-resume-callout")).toHaveAttribute("href", "/resume/download");
+  await expect(page.getByTestId("contact-resume-callout")).toContainText("Download resume");
   await expect(page.getByRole("heading", { name: "Contact me" })).toBeVisible();
+
+  const contactLayout = await page.locator("#contact").evaluate((section) => {
+    const heading = section.querySelector("#contact-heading");
+    const tabs = section.querySelector('[data-testid="contact-social-tabs"]');
+    const callout = section.querySelector('[data-testid="contact-resume-callout"]');
+    const headingRect = heading?.getBoundingClientRect();
+    const tabsRect = tabs?.getBoundingClientRect();
+    const calloutRect = callout?.getBoundingClientRect();
+
+    return {
+      calloutWidth: Math.round(calloutRect?.width ?? 0),
+      headingBottom: Math.round(headingRect?.bottom ?? 0),
+      tabsTop: Math.round(tabsRect?.top ?? 0),
+      tabsWidth: Math.round(tabsRect?.width ?? 0)
+    };
+  });
+
+  expect(contactLayout.tabsTop).toBeGreaterThan(contactLayout.headingBottom);
+  expect(contactLayout.calloutWidth).toBe(contactLayout.tabsWidth);
 
   const contactBackground = await page.locator("#contact").evaluate((section) => getComputedStyle(section).backgroundColor);
   expect(contactBackground).toBe("rgb(17, 27, 24)");

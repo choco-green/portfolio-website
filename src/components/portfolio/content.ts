@@ -294,7 +294,7 @@ export const softSkills = [
   "Communicates tradeoffs directly when scope, quality, or evidence is at risk."
 ];
 
-export const contactActions: ContactAction[] = [
+export const contactSocialActions: ContactAction[] = [
   {
     label: "Email",
     detail: "justin--fung@outlook.com",
@@ -312,11 +312,14 @@ export const contactActions: ContactAction[] = [
     detail: "linkedin.com/in/justin-fung-nsb",
     href: "https://www.linkedin.com/in/justin-fung-nsb",
     icon: Network
-  },
-  {
-    label: "Resume",
-    detail: "Download Justin Fung resume PDF",
-    href: localizedResumeDownloadHref,
-    icon: FileText
   }
 ];
+
+export const resumeAction: ContactAction = {
+  label: "Resume",
+  detail: "Download Justin Fung resume PDF",
+  href: localizedResumeDownloadHref,
+  icon: FileText
+};
+
+export const contactActions: ContactAction[] = [...contactSocialActions, resumeAction];

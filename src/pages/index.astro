@@ -11,7 +11,7 @@ import { preparePortfolioImages } from "../components/portfolio/prepareImages";
 const siteName = "Justin Fung Portfolio";
 const title = siteName;
 const description =
-  "Justin Fung is a full-stack engineer in Germany building polished web products, robust backend systems, and evidence-backed product experiences.";
+  "Justin Fung is a full-stack engineer who builds polished web products with robust backend systems, with a keen eye for UI/UX.";
 const portfolioImages = await preparePortfolioImages();
 const site = Astro.site ?? new URL("https://justinfung.com");
 const heroPortraitUrl = new URL(portfolioImages.heroPortrait.src, site).toString();

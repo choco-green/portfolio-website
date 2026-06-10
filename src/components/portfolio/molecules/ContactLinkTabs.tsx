@@ -15,13 +15,14 @@ export default function ContactLinkTabs({ actions }: ContactLinkTabsProps) {
       {actions.map((action) => {
         const Icon = action.icon;
         const external = action.href.startsWith("https://");
+        const rel = [action.rel, external ? "noreferrer" : undefined].filter(Boolean).join(" ") || undefined;
 
         return (
           <a
             key={action.href}
             href={action.href}
             target={external ? "_blank" : undefined}
-            rel={external ? "noreferrer" : undefined}
+            rel={rel}
             className="group flex min-h-24 items-center gap-4 px-4 py-4 transition hover:bg-white/10 focus-visible:bg-white/10 sm:flex-col sm:items-start sm:justify-between"
             aria-label={`${action.label}: ${action.detail}`}
           >

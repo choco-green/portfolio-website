@@ -86,6 +86,57 @@ test("first viewport renders crawlable identity content", async ({ page }) => {
   await expect(page.getByText("Based in Germany, focused on full-stack product engineering.")).toHaveCount(0);
 });
 
+test("homepage publishes canonical search identity metadata", async ({ page }) => {
+  await page.goto("/");
+
+  const description =
+    "Justin Fung is a full-stack engineer in Germany building React, Next.js, TypeScript, Node.js, and Rust products across healthcare, education, and developer tools.";
+
+  await expect(page).toHaveTitle("Justin Fung | Full-Stack Engineer");
+  await expect(page.locator('meta[name="description"]')).toHaveAttribute("content", description);
+  await expect(page.locator('meta[name="author"]')).toHaveAttribute("content", "Justin Fung");
+  await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", "index, follow");
+  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", "https://justinfung.com/");
+  await expect(page.locator('link[rel="me"][href="https://github.com/choco-green"]')).toHaveCount(1);
+  await expect(page.locator('link[rel="me"][href="https://www.linkedin.com/in/justin-fung-nsb"]')).toHaveCount(1);
+  await expect(page.locator('meta[property="og:type"]')).toHaveAttribute("content", "profile");
+  await expect(page.locator('meta[property="og:title"]')).toHaveAttribute("content", "Justin Fung | Full-Stack Engineer");
+  await expect(page.locator('meta[property="profile:first_name"]')).toHaveAttribute("content", "Justin");
+  await expect(page.locator('meta[property="profile:last_name"]')).toHaveAttribute("content", "Fung");
+  await expect(page.locator('meta[name="twitter:description"]')).toHaveAttribute("content", description);
+  await expect(page.locator('meta[name="twitter:image"]')).toHaveAttribute("content", /^https:\/\/justinfung\.com\/_(?:astro|image)(?:\/|\?)/);
+
+  const structuredData = await page.locator('script[type="application/ld+json"]').textContent();
+  const schema = JSON.parse(structuredData ?? "{}") as {
+    "@graph": Array<Record<string, unknown>>;
+  };
+  const person = schema["@graph"].find((node) => node["@type"] === "Person");
+  const profilePage = schema["@graph"].find((node) => node["@type"] === "ProfilePage");
+  const website = schema["@graph"].find((node) => node["@type"] === "WebSite");
+
+  expect(person).toEqual(
+    expect.objectContaining({
+      "@id": "https://justinfung.com/#person",
+      name: "Justin Fung",
+      url: "https://justinfung.com/",
+      jobTitle: "Full-stack engineer",
+      sameAs: ["https://github.com/choco-green", "https://www.linkedin.com/in/justin-fung-nsb"]
+    })
+  );
+  expect(profilePage).toEqual(
+    expect.objectContaining({
+      "@id": "https://justinfung.com/#profile",
+      about: { "@id": "https://justinfung.com/#person" }
+    })
+  );
+  expect(website).toEqual(
+    expect.objectContaining({
+      "@id": "https://justinfung.com/#website",
+      publisher: { "@id": "https://justinfung.com/#person" }
+    })
+  );
+});
+
 test("desktop Command Navigation filters aliases and activates suggestions", async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 850 });
   await page.goto("/");
@@ -397,7 +448,9 @@ test("contact tabs, resume callout, and reduced-motion content are available", a
   await expect(contactTabs.getByRole("link")).toHaveCount(3);
   await expect(contactTabs.getByRole("link", { name: /Email: justin--fung@outlook.com/ })).toHaveAttribute("href", "mailto:justin--fung@outlook.com");
   await expect(contactTabs.getByRole("link", { name: /GitHub: github.com\/choco-green/ })).toHaveAttribute("href", "https://github.com/choco-green");
+  await expect(contactTabs.getByRole("link", { name: /GitHub: github.com\/choco-green/ })).toHaveAttribute("rel", "me noreferrer");
   await expect(contactTabs.getByRole("link", { name: /LinkedIn: linkedin.com\/in\/justin-fung-nsb/ })).toHaveAttribute("href", "https://www.linkedin.com/in/justin-fung-nsb");
+  await expect(contactTabs.getByRole("link", { name: /LinkedIn: linkedin.com\/in\/justin-fung-nsb/ })).toHaveAttribute("rel", "me noreferrer");
   await expect(page.getByTestId("contact-resume-callout")).toHaveAttribute("href", "/resume/download");
   await expect(page.getByTestId("contact-resume-callout")).toContainText("Download resume");
   await expect(page.getByRole("heading", { name: "Contact me" })).toBeVisible();

@@ -312,13 +312,15 @@ export const contactSocialActions: ContactAction[] = [
     label: "GitHub",
     detail: "github.com/choco-green",
     href: "https://github.com/choco-green",
-    icon: Code2
+    icon: Code2,
+    rel: "me"
   },
   {
     label: "LinkedIn",
     detail: "linkedin.com/in/justin-fung-nsb",
     href: "https://www.linkedin.com/in/justin-fung-nsb",
-    icon: Network
+    icon: Network,
+    rel: "me"
   }
 ];
 

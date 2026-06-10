@@ -86,4 +86,5 @@ export type ContactAction = {
   detail: string;
   href: string;
   icon: LucideIcon;
+  rel?: string;
 };

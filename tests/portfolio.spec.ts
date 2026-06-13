@@ -126,7 +126,12 @@ test("homepage publishes canonical search identity metadata", async ({ page }) =
   expect(profilePage).toEqual(
     expect.objectContaining({
       "@id": "https://justinfung.com/#profile",
-      about: { "@id": "https://justinfung.com/#person" }
+      about: { "@id": "https://justinfung.com/#person" },
+      mainEntity: expect.objectContaining({
+        "@id": "https://justinfung.com/#person",
+        "@type": "Person",
+        name: "Justin Fung"
+      })
     })
   );
   expect(website).toEqual(

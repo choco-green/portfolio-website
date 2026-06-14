@@ -1,0 +1,52 @@
+---
+import "../../styles/global.css";
+
+const title = "Justin Fung Portfolio API Documentation";
+const description = "Public endpoint documentation for agent and automation discovery on justinfung.com.";
+---
+
+<!doctype html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://justinfung.com/docs/api" />
+  </head>
+  <body>
+    <main class="mx-auto max-w-3xl px-5 py-12 text-[rgb(var(--color-ink))]">
+      <p class="font-mono text-sm font-semibold uppercase text-[rgb(var(--color-accent))]">Public endpoints</p>
+      <h1 class="mt-3 text-3xl font-bold">Justin Fung Portfolio API Documentation</h1>
+      <p class="mt-4 text-lg text-[rgb(var(--color-muted))]">
+        This site exposes a small public discovery surface for agents and automation. No authentication is required.
+      </p>
+
+      <section class="mt-10">
+        <h2 class="text-2xl font-bold">Discovery</h2>
+        <ul class="mt-4 list-disc space-y-2 pl-6 text-[rgb(var(--color-muted))]">
+          <li><a class="underline" href="/.well-known/api-catalog">API catalog</a></li>
+          <li><a class="underline" href="/openapi.json">OpenAPI description</a></li>
+          <li><a class="underline" href="/health.json">Health metadata</a></li>
+          <li><a class="underline" href="/auth.md">Agent authentication notes</a></li>
+          <li><a class="underline" href="/.well-known/agent-skills/index.json">Agent skills index</a></li>
+        </ul>
+      </section>
+
+      <section id="resume-download" class="mt-10">
+        <h2 class="text-2xl font-bold">Resume Download</h2>
+        <p class="mt-4 text-[rgb(var(--color-muted))]">
+          <code>GET /resume/download</code> returns Justin Fung's resume as a PDF attachment. On Cloudflare Pages, country metadata may select the Germany-specific resume for Germany visitors.
+        </p>
+      </section>
+
+      <section class="mt-10">
+        <h2 class="text-2xl font-bold">Markdown Representation</h2>
+        <p class="mt-4 text-[rgb(var(--color-muted))]">
+          Requests to the homepage with <code>Accept: text/markdown</code> return a Markdown profile summary while browser HTML remains the default representation.
+        </p>
+      </section>
+    </main>
+  </body>
+</html>

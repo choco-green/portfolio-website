@@ -1,0 +1,26 @@
+{
+  "$schema": "https://agentskills.io/schemas/agent-skills-discovery-v0.2.0.json",
+  "skills": [
+    {
+      "name": "portfolio-profile",
+      "type": "markdown",
+      "description": "Return a compact, factual profile for Justin Fung.",
+      "url": "https://justinfung.com/.well-known/agent-skills/portfolio-profile.md",
+      "sha256": "954971a05449522f5eb03215b336de54c18c71d903d6c0cac33eeb4e09e2a49e"
+    },
+    {
+      "name": "resume-download",
+      "type": "markdown",
+      "description": "Retrieve Justin Fung's public resume PDF from the localized download endpoint.",
+      "url": "https://justinfung.com/.well-known/agent-skills/resume-download.md",
+      "sha256": "54e652e40719ccddc6ac5aae48887d9cbb1fb0580b595d5e4fccbfd592243a34"
+    },
+    {
+      "name": "project-discovery",
+      "type": "markdown",
+      "description": "Summarize Justin Fung's public project portfolio and source links.",
+      "url": "https://justinfung.com/.well-known/agent-skills/project-discovery.md",
+      "sha256": "111609f2d471e716ce0ec431b1329d576d5c438f12bf76de9d170d9ad705acf1"
+    }
+  ]
+}

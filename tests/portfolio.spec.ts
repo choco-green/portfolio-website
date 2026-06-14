@@ -24,6 +24,12 @@ async function expectResponsiveImage(locator: Locator, sizesPattern: RegExp) {
   await expect(locator).not.toHaveAttribute("src", /\/assets\/images\//);
 }
 
+async function sha256Hex(value: string) {
+  const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(value));
+
+  return Array.from(new Uint8Array(digest), (byte) => byte.toString(16).padStart(2, "0")).join("");
+}
+
 async function invokeResumeDownload(country?: string) {
   const { onRequest } = await import("../functions/resume/download.js");
   const originalFetch = globalThis.fetch;
@@ -59,6 +65,24 @@ async function invokeResumeDownload(country?: string) {
   } finally {
     globalThis.fetch = originalFetch;
   }
+}
+
+async function invokeAgentDiscoveryMiddleware(accept: string) {
+  const { onRequest } = await import("../functions/_middleware.js");
+
+  return onRequest({
+    request: new Request("https://justinfung.com/", {
+      headers: {
+        Accept: accept
+      }
+    }),
+    next: async () =>
+      new Response("<!doctype html><title>Justin Fung</title>", {
+        headers: {
+          "Content-Type": "text/html; charset=utf-8"
+        }
+      })
+  });
 }
 
 test("optimized raster images render with responsive attributes", async ({ page }) => {
@@ -105,6 +129,7 @@ test("homepage publishes canonical search identity metadata", async ({ page }) =
   await expect(page.locator('meta[property="profile:last_name"]')).toHaveAttribute("content", "Fung");
   await expect(page.locator('meta[name="twitter:description"]')).toHaveAttribute("content", description);
   await expect(page.locator('meta[name="twitter:image"]')).toHaveAttribute("content", /^https:\/\/justinfung\.com\/_(?:astro|image)(?:\/|\?)/);
+  await expect(page.locator("script").evaluateAll((scripts) => scripts.some((script) => script.textContent?.includes("navigator.modelContext")))).resolves.toBe(true);
 
   const structuredData = await page.locator('script[type="application/ld+json"]').textContent();
   const schema = JSON.parse(structuredData ?? "{}") as {
@@ -140,6 +165,121 @@ test("homepage publishes canonical search identity metadata", async ({ page }) =
       publisher: { "@id": "https://justinfung.com/#person" }
     })
   );
+});
+
+test("Cloudflare middleware advertises agent discovery links on homepage responses", async () => {
+  const response = await invokeAgentDiscoveryMiddleware("text/html");
+
+  expect(response.headers.get("Content-Type")).toContain("text/html");
+  expect(response.headers.get("Vary")).toContain("Accept");
+  expect(response.headers.get("Link")).toContain('</.well-known/api-catalog>; rel="api-catalog"; type="application/linkset+json"');
+  expect(response.headers.get("Link")).toContain('</docs/api>; rel="service-doc"; type="text/html"');
+  expect(response.headers.get("Link")).toContain('</auth.md>; rel="service-doc"; type="text/markdown"');
+  expect(response.headers.get("Link")).toContain('</.well-known/agent-skills/index.json>; rel="service-desc"; type="application/json"');
+  expect(await response.text()).toContain("Justin Fung");
+});
+
+test("Cloudflare middleware returns Markdown for agents that request it", async () => {
+  const response = await invokeAgentDiscoveryMiddleware("text/markdown, text/html;q=0.5");
+
+  expect(response.headers.get("Content-Type")).toContain("text/markdown");
+  expect(Number(response.headers.get("x-markdown-tokens"))).toBeGreaterThan(0);
+  expect(response.headers.get("Link")).toContain('rel="api-catalog"');
+  await expect(response.text()).resolves.toContain("# Justin Fung");
+});
+
+test("agent discovery endpoints publish machine-readable resources", async ({ request }) => {
+  const catalogResponse = await request.get("/.well-known/api-catalog");
+  expect(catalogResponse.ok()).toBe(true);
+  expect(catalogResponse.headers()["content-type"]).toContain("application/linkset+json");
+
+  const catalog = (await catalogResponse.json()) as {
+    linkset: Array<Record<string, Array<Record<string, string>> | string>>;
+  };
+
+  expect(catalog.linkset).toEqual(
+    expect.arrayContaining([
+      expect.objectContaining({
+        anchor: "https://justinfung.com/",
+        "service-desc": [expect.objectContaining({ href: "https://justinfung.com/openapi.json" })],
+        "service-doc": [expect.objectContaining({ href: "https://justinfung.com/docs/api" })],
+        status: [expect.objectContaining({ href: "https://justinfung.com/health.json" })]
+      })
+    ])
+  );
+
+  const openApiResponse = await request.get("/openapi.json");
+  expect(openApiResponse.ok()).toBe(true);
+  expect(openApiResponse.headers()["content-type"]).toContain("application/vnd.oai.openapi+json");
+  await expect(openApiResponse.json()).resolves.toEqual(
+    expect.objectContaining({
+      openapi: "3.1.0",
+      paths: expect.objectContaining({
+        "/resume/download": expect.any(Object)
+      })
+    })
+  );
+
+  const authResponse = await request.get("/auth.md");
+  expect(authResponse.ok()).toBe(true);
+  expect(authResponse.headers()["content-type"]).toContain("text/markdown");
+  await expect(authResponse.text()).resolves.toContain("No OAuth registration is required");
+
+  const serverCardResponse = await request.get("/.well-known/mcp/server-card.json");
+  expect(serverCardResponse.ok()).toBe(true);
+  await expect(serverCardResponse.json()).resolves.toEqual(
+    expect.objectContaining({
+      serverInfo: expect.objectContaining({
+        name: "Justin Fung Portfolio"
+      }),
+      transports: expect.arrayContaining([expect.objectContaining({ type: "webmcp" })])
+    })
+  );
+});
+
+test("agent skills index includes valid SHA-256 digests for published skills", async ({ request }) => {
+  const response = await request.get("/.well-known/agent-skills/index.json");
+  expect(response.ok()).toBe(true);
+
+  const index = (await response.json()) as {
+    "$schema": string;
+    skills: Array<{
+      name: string;
+      type: string;
+      description: string;
+      url: string;
+      sha256: string;
+    }>;
+  };
+
+  expect(index["$schema"]).toContain("agent-skills-discovery-v0.2.0");
+  expect(index.skills).toHaveLength(3);
+
+  for (const skill of index.skills) {
+    expect(skill).toEqual(
+      expect.objectContaining({
+        name: expect.any(String),
+        type: "markdown",
+        description: expect.any(String),
+        url: expect.stringMatching(/^https:\/\/justinfung\.com\/\.well-known\/agent-skills\/.+\.md$/),
+        sha256: expect.stringMatching(/^[a-f0-9]{64}$/)
+      })
+    );
+
+    const skillPath = new URL(skill.url).pathname;
+    const skillResponse = await request.get(skillPath);
+    expect(skillResponse.ok()).toBe(true);
+
+    const digest = await sha256Hex(await skillResponse.text());
+    expect(digest).toBe(skill.sha256);
+  }
+});
+
+test("robots.txt declares AI content usage preferences", async ({ request }) => {
+  const response = await request.get("/robots.txt");
+
+  expect(response.ok()).toBe(true);
+  await expect(response.text()).resolves.toContain("Content-Signal: ai-train=no, search=yes, ai-input=no");
 });
 
 test("desktop Command Navigation filters aliases and activates suggestions", async ({ page }) => {

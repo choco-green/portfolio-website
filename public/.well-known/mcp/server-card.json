@@ -1,0 +1,41 @@
+{
+  "$schema": "https://modelcontextprotocol.io/schemas/server-card.schema.json",
+  "serverInfo": {
+    "name": "Justin Fung Portfolio",
+    "version": "1.0.0",
+    "description": "Browser-exposed portfolio context for Justin Fung's public profile, projects, skills, contact links, and resume download."
+  },
+  "transports": [
+    {
+      "type": "webmcp",
+      "url": "https://justinfung.com/",
+      "description": "Open the portfolio homepage in a WebMCP-capable browser to access browser-provided context tools."
+    }
+  ],
+  "capabilities": {
+    "tools": {
+      "listChanged": false
+    },
+    "resources": {
+      "subscribe": false,
+      "listChanged": false
+    },
+    "prompts": {
+      "listChanged": false
+    }
+  },
+  "tools": [
+    {
+      "name": "get_portfolio_profile",
+      "description": "Return Justin Fung's profile, contact links, resume URL, skills, and public project list."
+    },
+    {
+      "name": "list_portfolio_projects",
+      "description": "Return Justin Fung's public project summaries and source URLs."
+    },
+    {
+      "name": "get_contact_links",
+      "description": "Return public email, GitHub, LinkedIn, and resume links."
+    }
+  ]
+}

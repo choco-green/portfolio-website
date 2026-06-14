@@ -7,6 +7,7 @@ import ProjectsSection from "../components/portfolio/organisms/ProjectsSection";
 import SkillsSection from "../components/portfolio/organisms/SkillsSection";
 import ContactSection from "../components/portfolio/organisms/ContactSection";
 import { preparePortfolioImages } from "../components/portfolio/prepareImages";
+import { contactSocialActions, projects, skillGroups } from "../components/portfolio/content";
 
 const siteName = "Justin Fung Portfolio";
 const title = "Justin Fung | Full-Stack Engineer";
@@ -85,6 +86,65 @@ const structuredData = {
   "@context": "https://schema.org",
   "@graph": [person, profilePage, website]
 };
+
+const webMcpData = JSON.stringify({
+  profile: {
+    name: person.name,
+    role: person.jobTitle,
+    location: "Germany",
+    homepage: canonicalUrl,
+    resume: "https://justinfung.com/resume/download",
+    contacts: contactSocialActions.map(({ label, detail, href }) => ({ label, detail, href })),
+    skills: skillGroups.map(({ title, items }) => ({ title, items }))
+  },
+  projects: projects.map(({ title, summary, tags, url }) => ({ title, summary, tags, url }))
+}).replaceAll("<", "\\u003c");
+
+const webMcpScript = `(() => {
+  const data = ${webMcpData};
+  const modelContext = navigator.modelContext;
+
+  if (!modelContext || typeof modelContext.provideContext !== "function") {
+    return;
+  }
+
+  const emptyInputSchema = {
+    type: "object",
+    additionalProperties: false,
+    properties: {}
+  };
+
+  modelContext.provideContext({
+    name: "Justin Fung Portfolio",
+    version: "1.0.0",
+    tools: [
+      {
+        name: "get_portfolio_profile",
+        description: "Return Justin Fung's profile, contact links, resume URL, skills, and public project list.",
+        inputSchema: emptyInputSchema,
+        execute: async () => ({
+          ...data.profile,
+          projects: data.projects
+        })
+      },
+      {
+        name: "list_portfolio_projects",
+        description: "Return Justin Fung's public project summaries and source URLs.",
+        inputSchema: emptyInputSchema,
+        execute: async () => data.projects
+      },
+      {
+        name: "get_contact_links",
+        description: "Return public email, GitHub, LinkedIn, and resume links.",
+        inputSchema: emptyInputSchema,
+        execute: async () => ({
+          contacts: data.profile.contacts,
+          resume: data.profile.resume
+        })
+      }
+    ]
+  });
+})();`;
 ---
 
 <!doctype html>
@@ -127,6 +187,7 @@ const structuredData = {
       })();
     </script>
     <script is:inline type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+    <script is:inline set:html={webMcpScript} />
   </head>
   <body>
     <a class="skip-link" href="#main-content">Skip to main content</a>

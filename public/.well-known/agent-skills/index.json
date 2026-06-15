@@ -6,14 +6,14 @@
       "type": "markdown",
       "description": "Return a compact, factual profile for Justin Fung.",
       "url": "https://justinfung.com/.well-known/agent-skills/portfolio-profile.md",
-      "sha256": "954971a05449522f5eb03215b336de54c18c71d903d6c0cac33eeb4e09e2a49e"
+      "sha256": "d8d9a12e431c0fcdee70fda94d4cc6332e2562f502702a38b5f53bb2d9c39d51"
     },
     {
       "name": "resume-download",
       "type": "markdown",
       "description": "Retrieve Justin Fung's public resume PDF from the localized download endpoint.",
       "url": "https://justinfung.com/.well-known/agent-skills/resume-download.md",
-      "sha256": "54e652e40719ccddc6ac5aae48887d9cbb1fb0580b595d5e4fccbfd592243a34"
+      "sha256": "9e92e821d31ebbcf68c9947ee4b95ca1d5dd11f0790cc6a60062c628557b3162"
     },
     {
       "name": "project-discovery",

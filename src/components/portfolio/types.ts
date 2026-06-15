@@ -84,7 +84,8 @@ export type Language = {
 export type ContactAction = {
   label: string;
   detail: string;
-  href: string;
+  href?: string;
   icon: LucideIcon;
+  crawlable?: boolean;
   rel?: string;
 };

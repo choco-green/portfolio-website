@@ -15,7 +15,7 @@ const apiCatalog = {
       ],
       "service-doc": [
         {
-          href: `${siteUrl}/docs/api`,
+          href: `${siteUrl}/docs/api/`,
           title: "Justin Fung portfolio public endpoint documentation",
           type: "text/html"
         }
@@ -46,7 +46,7 @@ const apiCatalog = {
       ],
       "service-doc": [
         {
-          href: `${siteUrl}/docs/api#resume-download`,
+          href: `${siteUrl}/docs/api/#resume-download`,
           title: "Resume download documentation",
           type: "text/html"
         }

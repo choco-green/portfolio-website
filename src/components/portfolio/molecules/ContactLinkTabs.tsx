@@ -7,25 +7,18 @@ type ContactLinkTabsProps = {
 
 export default function ContactLinkTabs({ actions }: ContactLinkTabsProps) {
   return (
-    <nav
-      aria-label="Contact link tabs"
+    <div
+      aria-label="Contact methods"
       className="grid overflow-hidden rounded-md border border-white/20 bg-white/8 divide-y divide-white/15 sm:grid-cols-3 sm:divide-x sm:divide-y-0"
       data-testid="contact-social-tabs"
     >
       {actions.map((action) => {
         const Icon = action.icon;
-        const external = action.href.startsWith("https://");
+        const href = action.crawlable === false ? undefined : action.href;
+        const external = href?.startsWith("https://") ?? false;
         const rel = [action.rel, external ? "noreferrer" : undefined].filter(Boolean).join(" ") || undefined;
-
-        return (
-          <a
-            key={action.href}
-            href={action.href}
-            target={external ? "_blank" : undefined}
-            rel={rel}
-            className="group flex min-h-24 items-center gap-4 px-4 py-4 transition hover:bg-white/10 focus-visible:bg-white/10 sm:flex-col sm:items-start sm:justify-between"
-            aria-label={`${action.label}: ${action.detail}`}
-          >
+        const content = (
+          <>
             <span className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-md bg-white/12 text-contact-accent">
               <Icon aria-hidden="true" size={20} />
             </span>
@@ -36,9 +29,33 @@ export default function ContactLinkTabs({ actions }: ContactLinkTabsProps) {
               </span>
               <span className="mt-1 block break-words text-sm text-white/72">{action.detail}</span>
             </span>
+          </>
+        );
+
+        if (!href) {
+          return (
+            <div
+              key={action.label}
+              className="flex min-h-24 items-center gap-4 px-4 py-4 sm:flex-col sm:items-start sm:justify-between"
+            >
+              {content}
+            </div>
+          );
+        }
+
+        return (
+          <a
+            key={href}
+            href={href}
+            target={external ? "_blank" : undefined}
+            rel={rel}
+            className="group flex min-h-24 items-center gap-4 px-4 py-4 transition hover:bg-white/10 focus-visible:bg-white/10 sm:flex-col sm:items-start sm:justify-between"
+            aria-label={`${action.label}: ${action.detail}`}
+          >
+            {content}
           </a>
         );
       })}
-    </nav>
+    </div>
   );
 }

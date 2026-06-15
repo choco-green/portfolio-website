@@ -8,9 +8,7 @@ Use this skill when an agent needs Justin Fung's resume.
 
 ## Behavior
 
-The endpoint returns a PDF attachment named `justin-fung-resume.pdf`.
-
-When deployed on Cloudflare Pages, Germany visitors may receive the Germany-specific resume PDF based on Cloudflare country metadata. Other visitors receive the fallback resume PDF.
+The endpoint returns a localized PDF attachment named `justin-fung-resume.pdf` when a regional resume is available. Other visitors receive the fallback resume PDF.
 
 ## Authentication
 

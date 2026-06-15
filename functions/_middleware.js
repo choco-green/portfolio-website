@@ -1,8 +1,10 @@
 const homepagePaths = new Set(["/", "/index.html"]);
+const canonicalHostname = "justinfung.com";
+const wwwHostname = `www.${canonicalHostname}`;
 
 const discoveryLinkHeader = [
   '</.well-known/api-catalog>; rel="api-catalog"; type="application/linkset+json"',
-  '</docs/api>; rel="service-doc"; type="text/html"',
+  '</docs/api/>; rel="service-doc"; type="text/html"',
   '</auth.md>; rel="service-doc"; type="text/markdown"',
   '</.well-known/agent-skills/index.json>; rel="service-desc"; type="application/json"',
   '</.well-known/mcp/server-card.json>; rel="service-desc"; type="application/json"'
@@ -14,7 +16,6 @@ Full-stack engineer building polished web products with robust backend systems a
 
 ## Profile
 
-- Location: Germany
 - Focus: full-stack product engineering
 - Stack: React, Next.js, Astro, TypeScript, Node.js, Rust, Postgres, Docker, Playwright
 - Languages: English, Chinese, German
@@ -112,6 +113,19 @@ function markdownTokenCount(markdown) {
   return markdown.trim().split(/\s+/).filter(Boolean).length.toString();
 }
 
+function canonicalHostRedirect(url) {
+  if (url.hostname.toLowerCase() !== wwwHostname) {
+    return undefined;
+  }
+
+  const target = new URL(url.toString());
+  target.protocol = "https:";
+  target.hostname = canonicalHostname;
+  target.port = "";
+
+  return Response.redirect(target.toString(), 301);
+}
+
 function withDiscoveryHeaders(response, pathname) {
   const headers = new Headers(response.headers);
   const contentType = contentTypes.get(pathname);
@@ -150,6 +164,11 @@ function markdownHomepageResponse(request) {
 export async function onRequest(context) {
   const { request } = context;
   const url = new URL(request.url);
+  const redirect = canonicalHostRedirect(url);
+
+  if (redirect) {
+    return redirect;
+  }
 
   if (homepagePaths.has(url.pathname) && (request.method === "GET" || request.method === "HEAD") && acceptsMarkdown(request)) {
     return markdownHomepageResponse(request);

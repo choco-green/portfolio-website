@@ -41,7 +41,7 @@ const openApiDocument = {
       get: {
         operationId: "downloadResume",
         summary: "Download Justin Fung's resume PDF",
-        description: "Returns a localized resume PDF. Cloudflare country metadata may select the Germany-specific PDF for Germany visitors.",
+        description: "Returns a localized resume PDF. Cloudflare country metadata may select a localized resume when available.",
         responses: {
           "200": {
             description: "Resume PDF.",

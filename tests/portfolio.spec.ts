@@ -68,11 +68,11 @@ async function invokeResumeDownload(country?: string) {
   }
 }
 
-async function invokeAgentDiscoveryMiddleware(accept: string) {
+async function invokeAgentDiscoveryMiddleware(accept: string, url = "https://justinfung.com/") {
   const { onRequest } = await import("../functions/_middleware.js");
 
   return onRequest({
-    request: new Request("https://justinfung.com/", {
+    request: new Request(url, {
       headers: {
         Accept: accept
       }
@@ -107,16 +107,15 @@ test("first viewport renders crawlable identity content", async ({ page }) => {
   await expect(page.locator("#home").getByLabel("Hiring-signal skills")).toHaveCount(0);
   await expect(page.locator("#home").getByRole("link", { name: "View All Skills", exact: true })).toHaveCount(0);
   await expect(page.locator("#home").getByText("Full-stack engineer", { exact: true })).toBeVisible();
-  await expect(page.locator("#home").getByText("Full-stack engineer in Germany", { exact: true })).toHaveCount(0);
-  await expect(page.getByText("Based in Germany, focused on full-stack product engineering.")).toHaveCount(0);
 });
 
 test("homepage publishes canonical search identity metadata", async ({ page }) => {
   await page.goto("/");
 
   const description =
-    "Justin Fung is a full-stack engineer in Germany building React, Next.js, TypeScript, Node.js, and Rust products across healthcare, education, and developer tools.";
+    "Justin Fung is a full-stack engineer building React, TypeScript, Node.js, and Rust products across healthcare, education, and developer tools.";
 
+  expect(description.length).toBeLessThanOrEqual(160);
   await expect(page).toHaveTitle("Justin Fung | Full-Stack Engineer");
   await expect(page.locator('meta[name="description"]')).toHaveAttribute("content", description);
   await expect(page.locator('meta[name="author"]')).toHaveAttribute("content", "Justin Fung");
@@ -168,13 +167,34 @@ test("homepage publishes canonical search identity metadata", async ({ page }) =
   );
 });
 
+test("homepage exposes crawlable internal portfolio resource links", async ({ page }) => {
+  await page.goto("/");
+
+  const resources = page.locator('footer[aria-labelledby="portfolio-resources-heading"]');
+  await expect(resources.getByRole("heading", { name: "Portfolio resources" })).toBeVisible();
+  await expect(resources.getByRole("link")).toHaveCount(6);
+  await expect(resources.getByRole("link", { name: "API Docs" })).toHaveAttribute("href", "/docs/api/");
+  await expect(resources.getByRole("link", { name: "OpenAPI" })).toHaveAttribute("href", "/openapi.json");
+  await expect(resources.getByRole("link", { name: "Health" })).toHaveAttribute("href", "/health.json");
+  await expect(resources.getByRole("link", { name: "Authentication" })).toHaveAttribute("href", "/auth.md");
+  await expect(resources.getByRole("link", { name: "Agent Skills" })).toHaveAttribute("href", "/.well-known/agent-skills/index.json");
+  await expect(resources.getByRole("link", { name: "Sitemap" })).toHaveAttribute("href", "/sitemap.xml");
+});
+
+test("Cloudflare middleware redirects www host to the canonical host", async () => {
+  const response = await invokeAgentDiscoveryMiddleware("text/html", "https://www.justinfung.com/docs/api/?ref=seo");
+
+  expect(response.status).toBe(301);
+  expect(response.headers.get("Location")).toBe("https://justinfung.com/docs/api/?ref=seo");
+});
+
 test("Cloudflare middleware advertises agent discovery links on homepage responses", async () => {
   const response = await invokeAgentDiscoveryMiddleware("text/html");
 
   expect(response.headers.get("Content-Type")).toContain("text/html");
   expect(response.headers.get("Vary")).toContain("Accept");
   expect(response.headers.get("Link")).toContain('</.well-known/api-catalog>; rel="api-catalog"; type="application/linkset+json"');
-  expect(response.headers.get("Link")).toContain('</docs/api>; rel="service-doc"; type="text/html"');
+  expect(response.headers.get("Link")).toContain('</docs/api/>; rel="service-doc"; type="text/html"');
   expect(response.headers.get("Link")).toContain('</auth.md>; rel="service-doc"; type="text/markdown"');
   expect(response.headers.get("Link")).toContain('</.well-known/agent-skills/index.json>; rel="service-desc"; type="application/json"');
   expect(await response.text()).toContain("Justin Fung");
@@ -203,7 +223,7 @@ test("agent discovery endpoints publish machine-readable resources", async ({ re
       expect.objectContaining({
         anchor: "https://justinfung.com/",
         "service-desc": [expect.objectContaining({ href: "https://justinfung.com/openapi.json" })],
-        "service-doc": [expect.objectContaining({ href: "https://justinfung.com/docs/api" })],
+        "service-doc": [expect.objectContaining({ href: "https://justinfung.com/docs/api/" })],
         status: [expect.objectContaining({ href: "https://justinfung.com/health.json" })]
       })
     ])
@@ -559,7 +579,7 @@ test("local dev server serves the resume download endpoint", async ({ request })
   expect((await response.body()).length).toBeGreaterThan(0);
 });
 
-test("Cloudflare resume endpoint downloads the Germany resume for Germany visitors", async () => {
+test("Cloudflare resume endpoint downloads the DE resume for DE visitors", async () => {
   const { fetchedUrls, response } = await invokeResumeDownload("DE");
 
   expect(fetchedUrls).toEqual(["https://justinfung.com/resume/justin-fung-resume-de.pdf"]);
@@ -567,7 +587,7 @@ test("Cloudflare resume endpoint downloads the Germany resume for Germany visito
   expect(response.headers.get("Content-Type")).toBe("application/pdf");
 });
 
-test("Cloudflare resume endpoint downloads the UK resume outside Germany", async () => {
+test("Cloudflare resume endpoint downloads the UK resume outside DE", async () => {
   const { fetchedUrls, response } = await invokeResumeDownload("GB");
 
   expect(fetchedUrls).toEqual(["https://justinfung.com/resume/justin-fung-resume-uk.pdf"]);
@@ -602,12 +622,13 @@ test("contact tabs, resume callout, and reduced-motion content are available", a
   await page.goto("/#contact");
 
   const contactTabs = page.getByTestId("contact-social-tabs");
-  await expect(contactTabs.getByRole("link")).toHaveCount(3);
+  await expect(contactTabs.getByRole("link")).toHaveCount(2);
   await expect(contactTabs.getByRole("link", { name: /Email: justin--fung@outlook.com/ })).toHaveAttribute("href", "mailto:justin--fung@outlook.com");
   await expect(contactTabs.getByRole("link", { name: /GitHub: github.com\/choco-green/ })).toHaveAttribute("href", "https://github.com/choco-green");
   await expect(contactTabs.getByRole("link", { name: /GitHub: github.com\/choco-green/ })).toHaveAttribute("rel", "me noreferrer");
-  await expect(contactTabs.getByRole("link", { name: /LinkedIn: linkedin.com\/in\/justin-fung-nsb/ })).toHaveAttribute("href", "https://www.linkedin.com/in/justin-fung-nsb");
-  await expect(contactTabs.getByRole("link", { name: /LinkedIn: linkedin.com\/in\/justin-fung-nsb/ })).toHaveAttribute("rel", "me noreferrer");
+  await expect(contactTabs.getByRole("link", { name: /LinkedIn/ })).toHaveCount(0);
+  await expect(contactTabs.getByText("LinkedIn", { exact: true })).toBeVisible();
+  await expect(contactTabs.getByText("linkedin.com/in/justin-fung-nsb", { exact: true })).toBeVisible();
   await expect(page.getByTestId("contact-resume-callout")).toHaveAttribute("href", "/resume/download");
   await expect(page.getByTestId("contact-resume-callout")).toContainText("Download resume");
   await expect(page.getByRole("heading", { name: "Contact me" })).toBeVisible();

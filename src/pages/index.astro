@@ -12,12 +12,20 @@ import { contactSocialActions, projects, skillGroups } from "../components/portf
 const siteName = "Justin Fung Portfolio";
 const title = "Justin Fung | Full-Stack Engineer";
 const description =
-  "Justin Fung is a full-stack engineer in Germany building React, Next.js, TypeScript, Node.js, and Rust products across healthcare, education, and developer tools.";
+  "Justin Fung is a full-stack engineer building React, TypeScript, Node.js, and Rust products across healthcare, education, and developer tools.";
 const canonicalUrl = "https://justinfung.com/";
 const portfolioImages = await preparePortfolioImages();
 const site = Astro.site ?? new URL(canonicalUrl);
 const heroPortraitUrl = new URL(portfolioImages.heroPortrait.src, site).toString();
 const socialProfiles = ["https://github.com/choco-green", "https://www.linkedin.com/in/justin-fung-nsb"];
+const portfolioResources = [
+  { label: "API Docs", href: "/docs/api/" },
+  { label: "OpenAPI", href: "/openapi.json" },
+  { label: "Health", href: "/health.json" },
+  { label: "Authentication", href: "/auth.md" },
+  { label: "Agent Skills", href: "/.well-known/agent-skills/index.json" },
+  { label: "Sitemap", href: "/sitemap.xml" }
+];
 
 const person = {
   "@type": "Person",
@@ -39,10 +47,6 @@ const person = {
     "Docker",
     "Testing"
   ],
-  address: {
-    "@type": "PostalAddress",
-    addressCountry: "DE"
-  },
   alumniOf: {
     "@type": "CollegeOrUniversity",
     name: "University of Leicester"
@@ -91,7 +95,6 @@ const webMcpData = JSON.stringify({
   profile: {
     name: person.name,
     role: person.jobTitle,
-    location: "Germany",
     homepage: canonicalUrl,
     resume: "https://justinfung.com/resume/download",
     contacts: contactSocialActions.map(({ label, detail, href }) => ({ label, detail, href })),
@@ -199,5 +202,26 @@ const webMcpScript = `(() => {
       <SkillsSection />
       <ContactSection />
     </main>
+    <footer aria-labelledby="portfolio-resources-heading" class="border-t border-line bg-canvas px-4 py-8 sm:px-6 lg:px-8">
+      <div class="mx-auto flex max-w-7xl flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <h2 id="portfolio-resources-heading" class="font-mono text-sm font-bold uppercase text-muted">Portfolio resources</h2>
+        <nav aria-label="Portfolio resources">
+          <ul class="flex flex-wrap gap-2">
+            {
+              portfolioResources.map((resource) => (
+                <li>
+                  <a
+                    class="inline-flex min-h-10 items-center rounded-md border border-line bg-raised px-3 py-2 text-sm font-bold text-muted transition hover:border-accent hover:text-accent-strong focus-visible:text-accent-strong"
+                    href={resource.href}
+                  >
+                    {resource.label}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </nav>
+      </div>
+    </footer>
   </body>
 </html>

@@ -12,7 +12,6 @@ Return a profile summary with:
 
 - Name: Justin Fung
 - Role: Full-stack engineer
-- Location: Germany
 - Focus: React, Next.js, Astro, TypeScript, Node.js, Rust, Postgres, Docker, and Playwright
 - Homepage: https://justinfung.com/
 - GitHub: https://github.com/choco-green

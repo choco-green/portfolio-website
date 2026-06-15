@@ -9,7 +9,7 @@ export default function SkillsSection() {
       <section id="skills" aria-labelledby="skills-heading" className="scroll-mt-24 px-4 py-16 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-7xl">
           <SectionIntro eyebrow="Skills" headingId="skills-heading" title="Technical range for full-stack product work." />
-          <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-5">
+          <div className="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
             {skillGroups.map((group) => (
               <SkillGroupCard key={group.title} group={group} />
             ))}

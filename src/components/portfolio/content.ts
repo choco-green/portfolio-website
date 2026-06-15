@@ -267,8 +267,8 @@ export const skillGroups: SkillGroup[] = [
     ]
   },
   {
-    title: "Backend and APIs",
-    items: ["Node.js", "NestJS", "Express", "Flask", "Spring Boot", "RESTful APIs", "OpenAI API", "Authentication", "Authorization", "Security"]
+    title: "Backend",
+    items: ["Node.js", "NestJS", "Express", "Flask", "Spring Boot", "Observability", "Authentication", "Authorization", "Security"]
   },
   {
     title: "Testing and Quality",
@@ -280,11 +280,11 @@ export const skillGroups: SkillGroup[] = [
   },
   {
     title: "Cloud and Delivery",
-    items: ["Git", "GitHub", "Linux", "Docker", "GitHub Actions", "Deployment", "Observability", "Logging", "AWS", "Azure", "GCP", "DigitalOcean"]
+    items: ["Git", "GitHub", "Linux", "Docker", "Deployment", "Observability", "Logging", "AWS", "Azure", "GCP", "DigitalOcean"]
   },
   {
     title: "Programming Languages",
-    items: ["TypeScript", "JavaScript", "Rust", "Java", "Python", "SQL"]
+    items: ["TypeScript", "JavaScript", "Rust", "Java", "Python", "C#", "Kotlin", "SQL"]
   }
 ];
 

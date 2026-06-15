@@ -320,7 +320,6 @@ export const contactSocialActions: ContactAction[] = [
     detail: "linkedin.com/in/justin-fung-nsb",
     href: "https://www.linkedin.com/in/justin-fung-nsb",
     icon: Network,
-    crawlable: false,
     rel: "me"
   }
 ];

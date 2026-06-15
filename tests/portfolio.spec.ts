@@ -622,11 +622,12 @@ test("contact tabs, resume callout, and reduced-motion content are available", a
   await page.goto("/#contact");
 
   const contactTabs = page.getByTestId("contact-social-tabs");
-  await expect(contactTabs.getByRole("link")).toHaveCount(2);
+  await expect(contactTabs.getByRole("link")).toHaveCount(3);
   await expect(contactTabs.getByRole("link", { name: /Email: justin--fung@outlook.com/ })).toHaveAttribute("href", "mailto:justin--fung@outlook.com");
   await expect(contactTabs.getByRole("link", { name: /GitHub: github.com\/choco-green/ })).toHaveAttribute("href", "https://github.com/choco-green");
   await expect(contactTabs.getByRole("link", { name: /GitHub: github.com\/choco-green/ })).toHaveAttribute("rel", "me noreferrer");
-  await expect(contactTabs.getByRole("link", { name: /LinkedIn/ })).toHaveCount(0);
+  await expect(contactTabs.getByRole("link", { name: /LinkedIn: linkedin.com\/in\/justin-fung-nsb/ })).toHaveAttribute("href", "https://www.linkedin.com/in/justin-fung-nsb");
+  await expect(contactTabs.getByRole("link", { name: /LinkedIn: linkedin.com\/in\/justin-fung-nsb/ })).toHaveAttribute("rel", "me noreferrer");
   await expect(contactTabs.getByText("LinkedIn", { exact: true })).toBeVisible();
   await expect(contactTabs.getByText("linkedin.com/in/justin-fung-nsb", { exact: true })).toBeVisible();
   await expect(page.getByTestId("contact-resume-callout")).toHaveAttribute("href", "/resume/download");

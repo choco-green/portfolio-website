@@ -12,6 +12,7 @@ A single-page portfolio website for myself, built with accessible navigation, re
 - Responsive hero, navigation, project, skills, languages, soft-skills, and contact sections.
 - Accessibility-minded controls, labels, focus targets, and reduced-motion coverage.
 - SEO metadata, JSON-LD identity data, `robots.txt`, and `sitemap.xml`.
+- DNS-AID publication records for DNS-based agent discovery.
 
 ## Stack
 
@@ -47,4 +48,5 @@ npm run test:e2e
 - `src/components/portfolio/atoms`, `molecules`, and `organisms` contain the component layers.
 - `src/assets/images` stores raster images that Astro optimizes at build time.
 - `public/assets` stores stable public files such as logos and the resume PDF.
+- `dns/dns-aid.zone` contains the DNS-AID records to publish for agent discovery.
 - `tests/portfolio.spec.ts` covers crawlable content, navigation behavior, responsive layout, and theme persistence.

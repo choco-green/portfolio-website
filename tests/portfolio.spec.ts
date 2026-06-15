@@ -1,4 +1,5 @@
 import { expect, test, type Locator, type Page } from "@playwright/test";
+import { readFile } from "node:fs/promises";
 
 async function waitForIslandHydration(page: Page, componentName: string) {
   await page.waitForFunction(
@@ -273,6 +274,17 @@ test("agent skills index includes valid SHA-256 digests for published skills", a
     const digest = await sha256Hex(await skillResponse.text());
     expect(digest).toBe(skill.sha256);
   }
+});
+
+test("DNS-AID zone records publish the organization agent index", async () => {
+  const zone = await readFile(new URL("../dns/dns-aid.zone", import.meta.url), "utf8");
+
+  expect(zone).toContain("_index._agents.justinfung.com. 3600 IN SVCB 1 justinfung.com.");
+  expect(zone).toContain("_index._agents.justinfung.com. 3600 IN HTTPS 1 justinfung.com.");
+  expect(zone).toContain("mandatory=alpn,port");
+  expect(zone).toContain("alpn=h2");
+  expect(zone).toContain("port=443");
+  expect(zone).toContain('key65280="/.well-known/agent-skills/index.json"');
 });
 
 test("robots.txt declares AI content usage preferences", async ({ request }) => {

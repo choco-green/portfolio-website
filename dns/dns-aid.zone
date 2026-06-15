@@ -1,0 +1,10 @@
+; DNS for AI Discovery (DNS-AID) records for justinfung.com.
+; Publish these records in the public authoritative zone and enable DNSSEC.
+; Reference draft: draft-mozleywilliams-dnsop-dnsaid-02.
+;
+; ServiceMode priority 1 points the DNS-AID organization index at the
+; existing HTTPS origin. The private-use key65280 carries the draft
+; "well-known" SvcParamKey value until IANA assigns a permanent key.
+
+_index._agents.justinfung.com. 3600 IN SVCB 1 justinfung.com. mandatory=alpn,port alpn=h2 port=443 key65280="/.well-known/agent-skills/index.json"
+_index._agents.justinfung.com. 3600 IN HTTPS 1 justinfung.com. mandatory=alpn,port alpn=h2 port=443 key65280="/.well-known/agent-skills/index.json"
